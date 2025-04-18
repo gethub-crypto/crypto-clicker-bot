@@ -1,11 +1,22 @@
 import os
+import threading
 from aiogram import Bot, Dispatcher, types, executor
 from collections import defaultdict
+from flask import Flask
 
-# Получаем токен из переменной окружения
+# Flask-заглушка для Render
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return 'Bot is running!'
+
+def run_web():
+    app.run(host='0.0.0.0', port=10000)
+
+# Telegram Bot
 bot = Bot(token=os.getenv("BOT_TOKEN"))
 dp = Dispatcher(bot)
-
 user_scores = defaultdict(int)
 
 @dp.message_handler(commands=['start'])
@@ -26,5 +37,6 @@ def click_kb():
     return types.InlineKeyboardMarkup(inline_keyboard=buttons)
 
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    threading.Thread(target=run_web).start()
+    executor.start_polling(dp, skip_updates=True)
     
