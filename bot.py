@@ -1,7 +1,9 @@
+import os
 from aiogram import Bot, Dispatcher, types, executor
 from collections import defaultdict
 
-bot = Bot(token="YOUR_TELEGRAM_BOT_TOKEN")
+# Получаем токен из переменной окружения
+bot = Bot(token=os.getenv("BOT_TOKEN"))
 dp = Dispatcher(bot)
 
 user_scores = defaultdict(int)
@@ -25,3 +27,4 @@ def click_kb():
 
 if __name__ == '__main__':
     executor.start_polling(dp)
+    
