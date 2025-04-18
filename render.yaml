@@ -1,5 +1,5 @@
 services:
-  - type: worker
+  - type: web
     name: crypto-clicker-bot
     env: python
     buildCommand: ""
