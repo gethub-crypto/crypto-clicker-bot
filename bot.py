@@ -1,6 +1,7 @@
 import os
 import threading
-from aiogram import Bot, Dispatcher, types, executor
+from aiogram import Bot, Dispatcher, types
+from aiogram.utils import executor
 from collections import defaultdict
 from flask import Flask
 
@@ -19,6 +20,12 @@ bot = Bot(token=os.getenv("BOT_TOKEN"))
 dp = Dispatcher(bot)
 user_scores = defaultdict(int)
 
+def click_kb():
+    buttons = [
+        [types.InlineKeyboardButton("💸 Собрать токен", callback_data='click')]
+    ]
+    return types.InlineKeyboardMarkup(inline_keyboard=buttons)
+
 @dp.message_handler(commands=['start'])
 async def start_game(message: types.Message):
     await message.answer("Добро пожаловать в Crypto Clicker!\nНажимай кнопку ниже 👇", reply_markup=click_kb())
@@ -29,12 +36,6 @@ async def click_handler(callback: types.CallbackQuery):
     user_scores[user_id] += 1
     await callback.answer(f"💰 Токены: {user_scores[user_id]}")
     await callback.message.edit_reply_markup(reply_markup=click_kb())
-
-def click_kb():
-    buttons = [
-        [types.InlineKeyboardButton("💸 Собрать токен", callback_data='click')]
-    ]
-    return types.InlineKeyboardMarkup(inline_keyboard=buttons)
 
 if __name__ == '__main__':
     threading.Thread(target=run_web).start()
