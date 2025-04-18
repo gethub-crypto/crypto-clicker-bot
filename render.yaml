@@ -1,0 +1,9 @@
+services:
+  - type: worker
+    name: crypto-clicker-bot
+    env: python
+    buildCommand: ""
+    startCommand: python bot.py
+    envVars:
+      - key: BOT_TOKEN
+        value: 123456789:AAAbbbCccDddEeeFffGggHhhIiiJjjKkk
